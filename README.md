@@ -32,6 +32,7 @@ If all tickets are closed as soon as they are merged into master, just get time 
 #### Potential bugs
 * Timezones
 * Do all teams have the same workflow with how they handle ticket statuses?
+    temporary fix: don't check for "done", check for "resolution"
 
 ## MTTR
 #### Goal
