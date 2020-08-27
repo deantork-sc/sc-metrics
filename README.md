@@ -7,8 +7,8 @@
 * Change fail percentage: how often major bugs are introduced (low dev prority)
 
 ## Sources:
-* (JIRA)[https://developer.atlassian.com/cloud/jira/platform/rest/v3/]
-* (GitHub)[https://docs.github.com/en/rest]
+* [JIRA](https://developer.atlassian.com/cloud/jira/platform/rest/v3/)
+* [GitHub](https://docs.github.com/en/rest)
 * CircleCI
 * AWS (for MTTR)
 
@@ -24,9 +24,9 @@ Get the time it takes between creation of story and that story's deployment to t
 #### Ideas
 If all tickets are closed as soon as they are merged into master, just get time discrepancy between when issue was opened and when it was closed
 #### Programatic solution
-* (Get all issues)[https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get] for a team in a given timespan
+* [Get all issues](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get) for a team in a given timespan
 * Filter the issues to only see the closed issues
-* Look at each (issue's changelog)[https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-changelog-get] to get time of creation and time that status was set to done
+* Look at each [issue's changelog](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-changelog-get) to get time of creation and time that status was set to done
 * Find the difference between the two 
 * Find the average of these differences for a team/individual
 #### Potential bugs
@@ -38,7 +38,7 @@ Get the time between all failing builds and the next successful build on the mas
 #### Ideas
 Find all failing builds and then find the next successful build, find the time discrepancy between the two
 #### Programatic solution
-* Get (some number of builds)[https://circleci.com/docs/api/#recent-builds-for-a-single-project] (30? 100?) for the project
+* Get [some number of builds](https://circleci.com/docs/api/#recent-builds-for-a-single-project) (30? 100?) for the project
 * Filter these results to only be builds on master
 * For each failing build, find the next successful build
 * Find the difference between the two
@@ -52,7 +52,7 @@ Find the average time between successful deployments of a project
 #### Ideas
 Find all successful builds on master in CircleCI and get the average time discrepancy between them
 #### Programatic solution
-* Get (some number of builds)[https://circleci.com/docs/api/#recent-builds-for-a-single-project] (30? 100?) for the project
+* Get [some number of builds](https://circleci.com/docs/api/#recent-builds-for-a-single-project) (30? 100?) for the project
 * Filter these results to only be builds on master that succeeded
 * Find the average difference between each build
 #### Potential bugs
@@ -64,6 +64,6 @@ Find the percentage of master builds that fail
 #### Ideas
 For some number of builds on master, find what percentage failed compared to the percentage that succeeded
 #### Programatic solution
-* Get (some number of builds)[https://circleci.com/docs/api/#recent-builds-for-a-single-project] (30? 100?) for the project
+* Get [some number of builds](https://circleci.com/docs/api/#recent-builds-for-a-single-project) (30? 100?) for the project
 * Filter these results to only be builds on master that either succeeded or failed
 * Calculate the ratio of failed builds to total
