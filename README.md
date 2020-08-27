@@ -20,17 +20,18 @@ Want to group by scrum team and individual
 
 ## Lead time
 #### Goal
-Get the time it takes between creation of story and that story's deployment to the code
+Get the time it takes between start of work on a story and that story's deployment to the code
 #### Ideas
 If all tickets are closed as soon as they are merged into master, just get time discrepancy between when issue was opened and when it was closed
 #### Programatic solution
 * [Get all issues](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get) for a team in a given timespan
 * Filter the issues to only see the closed issues
-* Look at each [issue's changelog](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-changelog-get) to get time of creation and time that status was set to done
+* Look at each [issue's changelog](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-changelog-get) to get time of assignment and time that status was set to done
 * Find the difference between the two 
 * Find the average of these differences for a team/individual
 #### Potential bugs
 * Timezones
+* Do all teams have the same workflow with how they handle ticket statuses?
 
 ## MTTR
 #### Goal
