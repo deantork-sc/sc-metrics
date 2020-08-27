@@ -56,7 +56,7 @@ Find all successful builds on master in CircleCI and get the average time discre
 * Filter these results to only be builds on master that succeeded
 * Find the average difference between each build
 #### Potential bugs
-* Does successful build always == deployment?
+* Does successful build always imply deployment?
 
 ## Change fail percentage
 #### Goal
