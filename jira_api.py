@@ -3,6 +3,16 @@
 import requests
 from requests.auth import HTTPBasicAuth
 import json
+import datetime
+
+# Get the difference between two datetime strings from JIRA
+def time_diff(start_datetime, end_datetime):
+    format_string = "%Y-%m-%dT%H:%M:%S.%f%z"
+    start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
+    end_datetime_obj = datetime.datetime.strptime(end_datetime, format_string)
+    delta = end_datetime_obj - start_datetime_obj
+    # hours not stored in delta object - need to get from seconds
+    return delta.seconds/3600
 
 class JiraApi:
     def __init__(self):
@@ -19,8 +29,21 @@ class JiraApi:
     def get_single_issue_leadtime(self, issue_id):
         response = self.get_issue_changelog(issue_id)
         response_json = json.loads(response.text)
+        start_datetime = ""
+        end_datetime = ""
+        for event in response_json["values"]:
+            for item in event["items"]:
+                # want to select only the first "created" event we see
+                if (item["toString"] == "In Progress" and start_datetime == ""):
+                    start_datetime = event["created"]
+                # as soon as it's resolved, it's resolved
+                if (item["field"] == "resolution"):
+                    end_datetime = event["created"]
+                    return time_diff(start_datetime, end_datetime)
         print(json.dumps(response_json, sort_keys=True, indent=4, separators=(",", ": ")))
+        raise Exception
 
 
 jira = JiraApi()
-jira.get_single_issue_leadtime("HLP-3327")
+delta = jira.get_single_issue_leadtime("HLP-3327")
+print(delta)
