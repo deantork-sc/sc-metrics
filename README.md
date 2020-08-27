@@ -9,7 +9,7 @@
 ## Sources:
 * [JIRA](https://developer.atlassian.com/cloud/jira/platform/rest/v3/)
 * [GitHub](https://docs.github.com/en/rest)
-* CircleCI
+* [CircleCI](https://circleci.com/docs/api/#projects)
 * AWS (for MTTR)
 
 ### Misc.
