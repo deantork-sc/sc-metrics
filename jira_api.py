@@ -11,7 +11,7 @@ class JiraApi:
         self.auth = HTTPBasicAuth("dean.torkelson@silvercar.com", api_token)
         self.headers = { "Accept": "application/json" }
 
-    # Get the difference between two datetime strings from JIRA
+    # Get the difference between two datetime strings from JIRA in hours
     def time_delta(self, start_datetime, end_datetime):
         format_string = "%Y-%m-%dT%H:%M:%S.%f%z"
         start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
