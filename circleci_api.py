@@ -8,7 +8,9 @@ class CircleciApi:
         with open('./config.json') as config:
             data = json.load(config)
             api_token = data["CIRCLECI_API"]
-        self.headers = { "Circle-Token": api_token }
+        self.headers = { 
+            "Accept": "application/json",
+            "Circle-Token": api_token }
 
     # Get the difference between two datetime strings from CircleCI in hours
     def time_delta(self, start_datetime, end_datetime):

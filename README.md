@@ -1,7 +1,8 @@
 # sc-metrics overview
+Please note that this document is very volatile and may not be up to date with latest project reqs
 
 ## Goal metrics:
-* Lead time: time from creating story to deployment in prod (CDT in CircleCI) (high dev prority)
+* Lead time: time from starting story work to deployment in prod (CDT in CircleCI) (high dev prority)
 * MTTR: time to restore from outage (high infrastructure priority)
 * Deployment frequency: frequency of deployment to prod (med dev prority)
 * Change fail percentage: how often major bugs are introduced (low dev prority)
