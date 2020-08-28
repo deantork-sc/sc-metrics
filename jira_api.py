@@ -1,5 +1,3 @@
-# This code sample uses the 'requests' library:
-# http://docs.python-requests.org
 import requests
 from requests.auth import HTTPBasicAuth
 import json
@@ -11,7 +9,7 @@ def time_diff(start_datetime, end_datetime):
     start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
     end_datetime_obj = datetime.datetime.strptime(end_datetime, format_string)
     delta = end_datetime_obj - start_datetime_obj
-    # hours not stored in delta object - need to get from seconds
+    # hours not stored in delta object - need to derive from seconds
     return delta.seconds/3600
 
 class JiraApi:
@@ -36,12 +34,12 @@ class JiraApi:
                 # want to select only the first "created" event we see
                 if (item["toString"] == "In Progress" and start_datetime == ""):
                     start_datetime = event["created"]
-                # as soon as it's resolved, it's resolved
-                if (item["field"] == "resolution"):
+                # as soon as it's resolved, consider it done for good
+                if (item["field"] == "resolution" and start_datetime != ""):
                     end_datetime = event["created"]
                     return time_diff(start_datetime, end_datetime)
-        print(json.dumps(response_json, sort_keys=True, indent=4, separators=(",", ": ")))
-        raise Exception
+        changelog = json.dumps(response_json, sort_keys=True, indent=4, separators=(",", ": "))
+        raise RuntimeError("error: start or end not set. changelog json:\n" + changelog)
 
 
 jira = JiraApi()
