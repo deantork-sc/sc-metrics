@@ -41,7 +41,20 @@ class JiraApi:
         changelog = json.dumps(response_json, sort_keys=True, indent=4, separators=(",", ": "))
         raise RuntimeError("error: start or end not set. changelog json:\n" + changelog)
 
+    def get_group(self):
+        url = f"https://silvercar.atlassian.net/rest/api/3/groupuserpicker?query=dean"
+        return requests.request( "GET", url, headers=self.headers, auth=self.auth)
+
+    def search_issue(self):
+        # gets helpdesk tasks that have been finished
+        jql = "project = HLP AND issuetype = Task AND status = Done AND createdDate > startOfYear()"
+        url = f"https://silvercar.atlassian.net/rest/api/3/search?jql={jql}"
+        return requests.request( "GET", url, headers=self.headers, auth=self.auth)
+
+    def get_issue(self):
+        url = f"https://silvercar.atlassian.net/rest/api/3/issue/HLP-3335"
+        return requests.request( "GET", url, headers=self.headers, auth=self.auth)
 
 jira = JiraApi()
-delta = jira.get_single_issue_leadtime("HLP-3327")
-print(delta)
+response = json.dumps(json.loads(jira.get_issue().text))
+print(response)
