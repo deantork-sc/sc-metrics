@@ -18,7 +18,7 @@ class GithubApi:
         start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
         end_datetime_obj = datetime.datetime.strptime(end_datetime, format_string)
         delta = end_datetime_obj - start_datetime_obj
-        # hours not stored in delta object - need to derive from seconds
+        # hours not stored in delta object - need to derive from days and seconds
         return delta.days * 24 + delta.seconds/3600
 
     def get_prs(self, project, state, limit):
@@ -60,7 +60,8 @@ class GithubApi:
             if (self.debug):
                 print(f"  start={start_datetime}, end={end_datetime}")
             delta = self.time_delta(start_datetime, end_datetime)
-            if (start_datetime != end_datetime):
+            if (len(commits_json) > 0):
+                # don't want to factor in single-commit PRs, as they have lead time of 0
                 delta_list.append(delta)
         print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} releases, {unlabeled_count} unlabeled, and {other_count} misc. others.")
         return delta_list
@@ -72,12 +73,13 @@ class GithubApi:
         if count == 0:
             print ("No PRs found with current criteria.")
             return
-        average = sum(delta_list) / count
         delta_list.sort()
-        median = delta_list[int(count / 2)]
+        average = round(sum(delta_list) / count, 2)
+        median = round(delta_list[int(count / 2)], 2)
         print(f"Lead time metrics (in hours) for the last {count} feature PRs in {project}: ")
         print(f"  Median: {median}")
         print(f"  Average: {average}")
 
 github = GithubApi()
-response = github.metrics(50, "dw-web")
+github.metrics(50, "dw-web")
+github.metrics(50, "mob-api")
