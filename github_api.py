@@ -8,7 +8,7 @@ class GithubApi:
         with open('./config.json') as config:
             data = json.load(config)
             token = data["GITHUB_PAT"]
-        self.debug = True
+        self.debug = False
         self.headers = { 
             "Accept": "Accept: application/vnd.github.v3+json",
             "Authorization": f"token {token}" }
@@ -33,20 +33,24 @@ class GithubApi:
         other_count = 0
         unlabeled_count = 0
         for pr in prs_json:
+            pr["body"] = pr["body"][:80].replace("[X]", "[x]")
             if (self.debug):
                 print(pr["title"])
                 print("  Body: " + repr(pr["body"][:80]) + "...")
-            if not ("[x] Feature" in pr["body"]):
+            if ("[x] Feature" not in pr["body"]):
                 if "[x] Bug Fix" in pr["body"]:
                     bugfix_count += 1
                 if "[x] Release" in pr["body"]:
                     release_count += 1
                 if "[x] Other" in pr["body"]:
                     other_count += 1
-                if not ("[x]" in pr["body"][:80]):
-                    unlabeled_count += 1
-                    if (self.debug):
-                        print("unlabeled: " + pr["title"])
+                if ("[x]" not in (pr["body"][:80])):
+                    if ("bump version" in pr["title"]) or ("Bump version" in pr["title"]):
+                        release_count += 1
+                    else:
+                        unlabeled_count += 1
+                        if (self.debug):
+                            print("unlabeled")
                 continue
             commits_response = requests.request("GET", url=pr["commits_url"], headers=self.headers)
             commits_json = json.loads(commits_response.text)
@@ -56,7 +60,8 @@ class GithubApi:
             if (self.debug):
                 print(f"  start={start_datetime}, end={end_datetime}")
             delta = self.time_delta(start_datetime, end_datetime)
-            delta_list.append(delta)
+            if (start_datetime != end_datetime):
+                delta_list.append(delta)
         print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} releases, {unlabeled_count} unlabeled, and {other_count} misc. others.")
         return delta_list
 
@@ -67,7 +72,7 @@ class GithubApi:
         if count == 0:
             print ("No PRs found with current criteria.")
             return
-        average = sum(delta_list)
+        average = sum(delta_list) / count
         delta_list.sort()
         median = delta_list[int(count / 2)]
         print(f"Lead time metrics (in hours) for the last {count} feature PRs in {project}: ")
