@@ -20,10 +20,6 @@ class JiraApi:
         # hours not stored in delta object - need to derive from seconds
         return delta.seconds/3600
 
-    def get_issue_changelog(self, issue_id):
-        url = f"https://silvercar.atlassian.net/rest/api/3/issue/{issue_id}/changelog"
-        return requests.request( "GET", url, headers=self.headers, auth=self.auth)
-
     def get_single_issue_leadtime(self, issue_id):
         response = self.get_issue_changelog(issue_id)
         response_json = json.loads(response.text)
@@ -41,6 +37,10 @@ class JiraApi:
         changelog = json.dumps(response_json, sort_keys=True, indent=4, separators=(",", ": "))
         raise RuntimeError("error: start or end not set. changelog json:\n" + changelog)
 
+    def get_issue_changelog(self, issue_id):
+        url = f"https://silvercar.atlassian.net/rest/api/3/issue/{issue_id}/changelog"
+        return requests.request( "GET", url, headers=self.headers, auth=self.auth)
+
     def get_group(self):
         url = f"https://silvercar.atlassian.net/rest/api/3/groupuserpicker?query=dean"
         return requests.request( "GET", url, headers=self.headers, auth=self.auth)
@@ -55,6 +55,22 @@ class JiraApi:
         url = f"https://silvercar.atlassian.net/rest/api/3/issue/HLP-3335"
         return requests.request( "GET", url, headers=self.headers, auth=self.auth)
 
+    def demo(self):
+        changelog = self.get_issue_changelog("HLP-3335").text
+        with open('changelog.json', 'w') as outfile:
+            json.dump(json.loads(changelog), outfile)
+
+        group = self.get_group().text
+        with open('group.json', 'w') as outfile:
+            json.dump(json.loads(group), outfile)
+
+        search = self.search_issue().text
+        with open('search.json', 'w') as outfile:
+            json.dump(json.loads(search), outfile)
+        
+        issue = self.get_issue().text
+        with open('issue.json', 'w') as outfile:
+            json.dump(json.loads(issue), outfile)
+
 jira = JiraApi()
-response = json.dumps(json.loads(jira.get_issue().text))
-print(response)
+jira.demo()
