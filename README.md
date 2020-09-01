@@ -2,10 +2,10 @@
 Please note that this document is very volatile and may not be up to date with latest project reqs
 
 ## Goal metrics:
-* Lead time: time from starting story work to deployment in prod (CDT in CircleCI) (high dev prority)
-* MTTR: time to restore from outage (high infrastructure priority)
-* Deployment frequency: frequency of deployment to prod (med dev prority)
-* Change fail percentage: how often major bugs are introduced (low dev prority)
+* Lead time
+* MTTR
+* Deployment frequency
+* Change fail percentage
 
 ## Sources:
 * [JIRA](https://developer.atlassian.com/cloud/jira/platform/rest/v3/)
@@ -37,29 +37,15 @@ If all tickets are closed as soon as they are merged into master, just get time 
 
 ## MTTR
 #### Goal
-Get the time between all failing builds and the next successful build on the master branch
+Get the percentage of the time we experience a service outage
 #### Ideas
-Find all failing builds and then find the next successful build, find the time discrepancy between the two
 #### Programatic solution
-* Get [some number of builds](https://circleci.com/docs/api/#recent-builds-for-a-single-project) (30? 100?) for the project
-* Filter these results to only be builds on master
-* For each failing build, find the next successful build
-* Find the difference between the two
-* Find the average of these differences
-#### Potential bugs
-* Builds are for the whole project, how frequent are builds on master?
 
 ## Deployment frequency
 #### Goal
-Find the average time between successful deployments of a project
+Get the average number of releases per developer, per day
 #### Ideas
-Find all successful builds on master in CircleCI and get the average time discrepancy between them
 #### Programatic solution
-* Get [some number of builds](https://circleci.com/docs/api/#recent-builds-for-a-single-project) (30? 100?) for the project
-* Filter these results to only be builds on master that succeeded
-* Find the average difference between each build
-#### Potential bugs
-* Does successful build always imply deployment?
 
 ## Change fail percentage
 #### Goal

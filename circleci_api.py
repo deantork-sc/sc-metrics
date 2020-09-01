@@ -23,7 +23,7 @@ class CircleciApi:
     
     # goal: find diff between any "failed" and the next "success"
     def get_builds(self, limit, project):
-        url = f"https://circleci.com/api/v1.1/project/github/{project}/mob-api?limit={limit}&shallow=true"
+        url = f"https://circleci.com/api/v1.1/project/github/{project}?limit={limit}&shallow=true"
         return requests.request( "GET", url, headers=self.headers)
 
 
@@ -46,6 +46,10 @@ class CircleciApi:
         mttr = recovery_time_sum / recovery_count
         return mttr
 
+    def get_workflows(self):
+        url = 'https://circleci.com/api/v2/insights/github/silvercar/dw-web/workflows?limit=15&branch=master'
+        return requests.request( "GET", url, headers=self.headers)
+
 Circleci = CircleciApi()
-response = Circleci.get_builds()
+response = Circleci.get_workflows()
 print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
