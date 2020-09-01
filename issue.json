@@ -1,0 +1,307 @@
+{
+    "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations",
+    "id": "65232",
+    "self": "https://silvercar.atlassian.net/rest/api/3/issue/65232",
+    "key": "HLP-3335",
+    "fields": {
+        "statuscategorychangedate": "2020-08-31T17:34:01.697-0500",
+        "fixVersions": [],
+        "customfield_11200": null,
+        "resolution": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/resolution/10000",
+            "id": "10000",
+            "description": "Work has been completed on this issue.",
+            "name": "Done"
+        },
+        "customfield_10500": "{}",
+        "customfield_11438": null,
+        "customfield_11437": null,
+        "customfield_10900": null,
+        "lastViewed": "2020-09-01T10:21:14.398-0500",
+        "customfield_11391": null,
+        "customfield_11390": null,
+        "customfield_11393": null,
+        "customfield_11395": null,
+        "customfield_11397": null,
+        "customfield_11396": null,
+        "priority": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/priority/3",
+            "iconUrl": "https://silvercar.atlassian.net/images/icons/priorities/medium.svg",
+            "name": "Medium",
+            "id": "3"
+        },
+        "customfield_10100": null,
+        "customfield_11399": null,
+        "customfield_11310": null,
+        "customfield_11398": null,
+        "customfield_10101": null,
+        "customfield_11311": null,
+        "customfield_10102": null,
+        "customfield_11434": null,
+        "labels": [],
+        "customfield_11303": null,
+        "customfield_11306": null,
+        "customfield_11307": null,
+        "aggregatetimeoriginalestimate": null,
+        "timeestimate": null,
+        "customfield_11308": null,
+        "versions": [],
+        "customfield_11309": null,
+        "issuelinks": [],
+        "assignee": null,
+        "status": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/status/10501",
+            "description": "The issue is considered finished, the resolution is correct. Issues which are closed can be reopened.",
+            "iconUrl": "https://silvercar.atlassian.net/",
+            "name": "Done",
+            "id": "10501",
+            "statusCategory": {
+                "self": "https://silvercar.atlassian.net/rest/api/3/statuscategory/3",
+                "id": 3,
+                "key": "done",
+                "colorName": "green",
+                "name": "Done"
+            }
+        },
+        "components": [],
+        "customfield_11380": null,
+        "customfield_11382": null,
+        "customfield_11381": null,
+        "customfield_11384": null,
+        "customfield_11383": null,
+        "customfield_11386": null,
+        "customfield_11385": null,
+        "customfield_11388": null,
+        "customfield_11387": null,
+        "customfield_11300": null,
+        "customfield_11301": null,
+        "customfield_11389": null,
+        "customfield_11414": null,
+        "customfield_11413": null,
+        "aggregatetimeestimate": null,
+        "creator": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/user?accountId=5f44092b9a01310041ec72ae",
+            "accountId": "5f44092b9a01310041ec72ae",
+            "emailAddress": "dean.torkelson@silvercar.com",
+            "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png"
+            },
+            "displayName": "Dean Torkelson",
+            "active": true,
+            "timeZone": "America/Chicago",
+            "accountType": "atlassian"
+        },
+        "subtasks": [],
+        "customfield_11370": null,
+        "customfield_11373": null,
+        "customfield_11375": null,
+        "reporter": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/user?accountId=5f44092b9a01310041ec72ae",
+            "accountId": "5f44092b9a01310041ec72ae",
+            "emailAddress": "dean.torkelson@silvercar.com",
+            "avatarUrls": {
+                "48x48": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png",
+                "24x24": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png",
+                "16x16": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png",
+                "32x32": "https://secure.gravatar.com/avatar/fadca9efe64e4b9ed261e9530e76379d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FDT-3.png"
+            },
+            "displayName": "Dean Torkelson",
+            "active": true,
+            "timeZone": "America/Chicago",
+            "accountType": "atlassian"
+        },
+        "customfield_11374": null,
+        "aggregateprogress": {
+            "progress": 0,
+            "total": 0
+        },
+        "customfield_11410": null,
+        "customfield_11377": null,
+        "customfield_11376": null,
+        "customfield_10200": null,
+        "customfield_11379": null,
+        "customfield_11411": null,
+        "customfield_11378": null,
+        "customfield_11369": null,
+        "customfield_11402": null,
+        "customfield_11405": null,
+        "customfield_11404": null,
+        "customfield_11407": null,
+        "customfield_11406": null,
+        "customfield_11409": null,
+        "customfield_11408": null,
+        "progress": {
+            "progress": 0,
+            "total": 0
+        },
+        "votes": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/issue/HLP-3335/votes",
+            "votes": 0,
+            "hasVoted": false
+        },
+        "worklog": {
+            "startAt": 0,
+            "maxResults": 20,
+            "total": 0,
+            "worklogs": []
+        },
+        "issuetype": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/issuetype/10002",
+            "id": "10002",
+            "description": "A task that needs to be done.",
+            "iconUrl": "https://silvercar.atlassian.net/secure/viewavatar?size=medium&avatarId=10318&avatarType=issuetype",
+            "name": "Task",
+            "subtask": false,
+            "avatarId": 10318
+        },
+        "customfield_11360": null,
+        "timespent": null,
+        "customfield_11362": null,
+        "project": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/project/11300",
+            "id": "11300",
+            "key": "HLP",
+            "name": "Helpdesk",
+            "projectTypeKey": "business",
+            "simplified": false,
+            "avatarUrls": {
+                "48x48": "https://silvercar.atlassian.net/secure/projectavatar?pid=11300&avatarId=10201",
+                "24x24": "https://silvercar.atlassian.net/secure/projectavatar?size=small&s=small&pid=11300&avatarId=10201",
+                "16x16": "https://silvercar.atlassian.net/secure/projectavatar?size=xsmall&s=xsmall&pid=11300&avatarId=10201",
+                "32x32": "https://silvercar.atlassian.net/secure/projectavatar?size=medium&s=medium&pid=11300&avatarId=10201"
+            }
+        },
+        "customfield_11361": null,
+        "customfield_11364": null,
+        "customfield_11000": null,
+        "customfield_11363": null,
+        "customfield_11366": null,
+        "aggregatetimespent": null,
+        "customfield_11365": null,
+        "customfield_11368": [],
+        "customfield_11401": null,
+        "customfield_11400": null,
+        "customfield_11367": null,
+        "customfield_11359": null,
+        "customfield_11358": null,
+        "customfield_10700": null,
+        "resolutiondate": "2020-08-31T17:34:01.693-0500",
+        "workratio": -1,
+        "watches": {
+            "self": "https://silvercar.atlassian.net/rest/api/3/issue/HLP-3335/watchers",
+            "watchCount": 1,
+            "isWatching": true
+        },
+        "issuerestriction": {
+            "issuerestrictions": {},
+            "shouldDisplay": false
+        },
+        "created": "2020-08-27T13:18:10.111-0500",
+        "customfield_11351": null,
+        "customfield_11350": null,
+        "customfield_11353": null,
+        "customfield_11352": null,
+        "customfield_11355": null,
+        "customfield_11354": null,
+        "customfield_10024": null,
+        "customfield_11357": null,
+        "customfield_11356": null,
+        "customfield_11348": null,
+        "customfield_11347": null,
+        "customfield_11349": null,
+        "updated": "2020-08-31T17:34:01.697-0500",
+        "timeoriginalestimate": null,
+        "description": {
+            "version": 1,
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Hello,"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Would y'all mind setting me up with a Jetbrains Rubymine license? My"
+                        },
+                        {
+                            "type": "hardBreak"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Jetbrains account uses this email address and has the username \""
+                        },
+                        {
+                            "type": "hardBreak"
+                        },
+                        {
+                            "type": "text",
+                            "text": "deantork-sc\"."
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Thanks,"
+                        },
+                        {
+                            "type": "hardBreak"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Dean"
+                        }
+                    ]
+                }
+            ]
+        },
+        "customfield_11342": null,
+        "customfield_11100": null,
+        "customfield_11341": null,
+        "customfield_11101": null,
+        "customfield_11344": null,
+        "customfield_11343": null,
+        "customfield_11346": null,
+        "customfield_11345": null,
+        "timetracking": {},
+        "customfield_10006": null,
+        "customfield_10007": "0|i05dpg:",
+        "security": null,
+        "customfield_10800": null,
+        "customfield_10008": null,
+        "attachment": [],
+        "summary": "Jetbrains License",
+        "customfield_10000": null,
+        "customfield_10001": "10600_*:*_1_*:*_360951600_*|*_10501_*:*_1_*:*_0",
+        "customfield_10002": null,
+        "customfield_10400": {
+            "hasEpicLinkFieldDependency": false,
+            "showField": false,
+            "nonEditableReason": {
+                "reason": "PLUGIN_LICENSE_ERROR",
+                "message": "The Parent Link is only available to Jira Premium users."
+            }
+        },
+        "environment": null,
+        "duedate": null,
+        "comment": {
+            "comments": [],
+            "maxResults": 0,
+            "total": 0,
+            "startAt": 0
+        }
+    }
+}

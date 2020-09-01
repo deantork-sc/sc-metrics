@@ -23,7 +23,7 @@ class CircleciApi:
     
     # goal: find diff between any "failed" and the next "success"
     def get_builds(self, limit, project):
-        url = f"https://circleci.com/api/v1.1/project/github/{project}?limit={limit}&shallow=true"
+        url = f"https://circleci.com/api/v1.1/project/github/silvercar/{project}?limit={limit}&shallow=true"
         return requests.request( "GET", url, headers=self.headers)
 
 
@@ -50,6 +50,14 @@ class CircleciApi:
         url = 'https://circleci.com/api/v2/insights/github/silvercar/dw-web/workflows?limit=15&branch=master'
         return requests.request( "GET", url, headers=self.headers)
 
-Circleci = CircleciApi()
-response = Circleci.get_workflows()
-print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
+    def demo(self):
+        builds = self.get_builds(limit=5, project="dw-web").text
+        with open('builds.json', 'w') as outfile:
+            json.dump(json.loads(builds), outfile)
+
+        workflows = self.get_workflows().text
+        with open('workflows.json', 'w') as outfile:
+            json.dump(json.loads(workflows), outfile)
+
+circleci = CircleciApi()
+circleci.demo()

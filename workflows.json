@@ -1,0 +1,49 @@
+{
+    "next_page_token": null,
+    "items": [
+        {
+            "name": "build-publish",
+            "metrics": {
+                "success_rate": 0.05555555555555555,
+                "total_runs": 18,
+                "failed_runs": 17,
+                "successful_runs": 1,
+                "throughput": 0.4864864864864865,
+                "mttr": 0,
+                "duration_metrics": {
+                    "min": 357,
+                    "max": 1825,
+                    "median": 661,
+                    "mean": 725,
+                    "p95": 1129,
+                    "standard_deviation": 325.0
+                },
+                "total_credits_used": 2522
+            },
+            "window_start": "2020-06-09T20:44:31.771Z",
+            "window_end": "2020-07-15T21:20:44.199Z"
+        },
+        {
+            "name": "storybook",
+            "metrics": {
+                "success_rate": 0.993006993006993,
+                "total_runs": 143,
+                "failed_runs": 1,
+                "successful_runs": 142,
+                "throughput": 1.625,
+                "mttr": 5676,
+                "duration_metrics": {
+                    "min": 189,
+                    "max": 1327,
+                    "median": 270,
+                    "mean": 328,
+                    "p95": 725,
+                    "standard_deviation": 173.0
+                },
+                "total_credits_used": 7386
+            },
+            "window_start": "2020-06-04T17:19:37.486Z",
+            "window_end": "2020-08-31T22:00:04.075Z"
+        }
+    ]
+}
