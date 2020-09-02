@@ -1,6 +1,7 @@
 from github_api import GithubApi
 from circleci_api import CircleciApi
 from jira_api import JiraApi
+import datetime
 
 class MetricsAggregator:
     def __init__(self):
@@ -8,7 +9,12 @@ class MetricsAggregator:
         self.circleci = CircleciApi()
         self.jira = JiraApi()
 
-    def get_lead_time(self, project, limit):
+    def timediff_hours(self, start_datetime_obj, end_datetime_obj):
+        delta = end_datetime_obj - start_datetime_obj
+        # hours not stored in delta object - need to derive from days and seconds
+        return delta.days * 24 + delta.seconds/3600
+
+    def print_lead_time(self, project, limit):
         delta_list = self.github.get_lead_time_array(project, limit)
         count = len(delta_list)
         if count == 0:
@@ -20,6 +26,31 @@ class MetricsAggregator:
         print(f"Lead time metrics (in hours) for the last {count} feature PRs in {project}: ")
         print(f"  Median: {median}")
         print(f"  Average: {average}")
+    
+    def print_change_fail(self, project, limit):
+        # this query returns tickets created in the last 3 months that are tagged as bug/support in Silvercar with priority Highest/High
+        jql_query = "(project = Silvercar) AND (type = Support OR type = Bug) AND \
+            (priority = Highest OR priority = High) AND created > -90d order by createdDate DESC"
+        builds_response = self.circleci.get_builds(project=project, limit=limit, filter="successful")
+        builds = json.loads(builds_response.text)
+        utcnow = datetime.datetime.utcnow()
+        for build in builds:
+            build_stop_datetime = self.circleci.format_time(build["stop_time"])
+            build["age"] = self.timediff_hours(build_stop_datetime, utcnow
+        bugs_response = self.jira.search_issue(jql_query=jql_query)
+        bugs = json.loads(builds_response.text)
+        for bug in bugs:
+            bug_datetime = self.jira.format_time(bug["stop_time"])
+            bug["age"] = self.timediff_hours(bug_datetime, utcnow
+
+        """
+            create an array (bug_counts) where each index = bugs that occurred during that build index
+            i.e., build 0 is the first build (most recent successful one) we get back. 
+            bug_counts[0] will be the number of bugs since the most recent build
+            bug_counts[1] will be the number of bugs between build 1 (second most recent) and build 0
+            etc.
+        """
+
 
 def main():
     metrics = MetricsAggregator()

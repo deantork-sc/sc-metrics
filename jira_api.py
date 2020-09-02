@@ -11,15 +11,10 @@ class JiraApi:
         self.auth = HTTPBasicAuth("dean.torkelson@silvercar.com", api_token)
         self.headers = { "Accept": "application/json" }
 
-    # Get the difference between two datetime strings from JIRA in hours
-    def time_delta(self, start_datetime, end_datetime):
+    def format_time(self, datetime_str):
         format_string = "%Y-%m-%dT%H:%M:%S.%f%z"
-        start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
-        end_datetime_obj = datetime.datetime.strptime(end_datetime, format_string)
-        delta = end_datetime_obj - start_datetime_obj
-        # hours not stored in delta object - need to derive from seconds
-        return delta.seconds/3600
-
+        return datetime.datetime.strptime(datetime_str, format_string)
+        
     def get_single_issue_leadtime(self, issue_id):
         response = self.get_issue_changelog(issue_id)
         response_json = json.loads(response.text)
@@ -45,10 +40,8 @@ class JiraApi:
         url = f"https://silvercar.atlassian.net/rest/api/3/groupuserpicker?query=dean"
         return requests.request( "GET", url, headers=self.headers, auth=self.auth)
 
-    def search_issue(self):
-        # gets helpdesk tasks that have been finished
-        jql = "project = HLP AND issuetype = Task AND status = Done AND createdDate > startOfYear()"
-        url = f"https://silvercar.atlassian.net/rest/api/3/search?jql={jql}"
+    def search_issue(self, jql_query):
+        url = f"https://silvercar.atlassian.net/rest/api/3/search?jql={jql_query}"
         return requests.request( "GET", url, headers=self.headers, auth=self.auth)
 
     def get_issue(self):
@@ -71,4 +64,3 @@ class JiraApi:
         issue = self.get_issue().text
         with open('issue.json', 'w') as outfile:
             json.dump(json.loads(issue), outfile)
-            

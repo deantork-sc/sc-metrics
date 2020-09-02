@@ -12,19 +12,20 @@ class CircleciApi:
             "Accept": "application/json",
             "Circle-Token": api_token }
 
-    # Get the difference between two datetime strings from CircleCI in hours
-    def time_delta(self, start_datetime, end_datetime):
+    def format_time(self, datetime_str):
         format_string = "%Y-%m-%dT%H:%M:%S.%fZ"
-        start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
-        end_datetime_obj = datetime.datetime.strptime(end_datetime, format_string)
-        delta = end_datetime_obj - start_datetime_obj
-        # hours not stored in delta object - need to derive from seconds
-        return delta.seconds/3600
+        return datetime.datetime.strptime(datetime_str, format_string)
     
-    # goal: find diff between any "failed" and the next "success"
-    def get_builds(self, limit, project):
-        url = f"https://circleci.com/api/v1.1/project/github/silvercar/{project}?limit={limit}&shallow=true"
+    def get_builds(self, project, limit, filter=None):
+        if (filter):
+            filter = f"&filter={filter}"
+        else:
+            filter = ""
+        url = f"https://circleci.com/api/v1.1/project/github/silvercar/{project}?limit={limit}{filter}&shallow=true"
         return requests.request( "GET", url, headers=self.headers)
+
+    def get_deployments(self):
+        # filter to only build-publish builds or something
 
 
     def get_mttr(self, project):
@@ -58,3 +59,8 @@ class CircleciApi:
         workflows = self.get_workflows().text
         with open('workflows.json', 'w') as outfile:
             json.dump(json.loads(workflows), outfile)
+
+circleci = CircleciApi()
+builds_resp = circleci.get_builds("mob-api", 1, "successful")
+print(json.dumps(json.loads(builds_resp.text), sort_keys=True, indent=4, separators=(",", ": ")))
+print(datetime.datetime.utcnow())

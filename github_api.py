@@ -13,13 +13,9 @@ class GithubApi:
             "Accept": "Accept: application/vnd.github.v3+json",
             "Authorization": f"token {token}" }
     
-    def time_delta(self, start_datetime, end_datetime):
+    def format_time(self, datetime_str):
         format_string = "%Y-%m-%dT%H:%M:%SZ"
-        start_datetime_obj = datetime.datetime.strptime(start_datetime, format_string)
-        end_datetime_obj = datetime.datetime.strptime(end_datetime, format_string)
-        delta = end_datetime_obj - start_datetime_obj
-        # hours not stored in delta object - need to derive from days and seconds
-        return delta.days * 24 + delta.seconds/3600
+        return datetime.datetime.strptime(datetime_str, format_string)
 
     def get_prs(self, project, state, limit):
         if (limit > 100):
