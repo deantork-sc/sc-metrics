@@ -58,6 +58,3 @@ class CircleciApi:
         workflows = self.get_workflows().text
         with open('workflows.json', 'w') as outfile:
             json.dump(json.loads(workflows), outfile)
-
-circleci = CircleciApi()
-circleci.demo()

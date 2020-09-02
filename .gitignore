@@ -1,4 +1,5 @@
 config.json
 scratch*
 
+*.json
 .idea/

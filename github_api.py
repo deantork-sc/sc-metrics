@@ -22,10 +22,12 @@ class GithubApi:
         return delta.days * 24 + delta.seconds/3600
 
     def get_prs(self, project, state, limit):
+        if (limit > 100):
+            print("PRs limited to 100 per page - if you want to use more, need to paginate")
         url = f"https://api.github.com/repos/silvercar/{project}/pulls?state={state}&per_page={limit}"
         return requests.request( "GET", url, headers=self.headers)
 
-    def get_lead_time_array(self, limit, project):
+    def get_lead_time_array(self, project, limit):
         prs_json = json.loads(self.get_prs(project, "closed", limit).text)
         delta_list = []
         bugfix_count = 0
@@ -65,21 +67,3 @@ class GithubApi:
                 delta_list.append(delta)
         print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} releases, {unlabeled_count} unlabeled, and {other_count} misc. others.")
         return delta_list
-
-    def metrics(self, lead_time_count, project):
-        print(f"Examining metrics for {project}")
-        delta_list = self.get_lead_time_array(lead_time_count, project)
-        count = len(delta_list)
-        if count == 0:
-            print ("No PRs found with current criteria.")
-            return
-        delta_list.sort()
-        average = round(sum(delta_list) / count, 2)
-        median = round(delta_list[int(count / 2)], 2)
-        print(f"Lead time metrics (in hours) for the last {count} feature PRs in {project}: ")
-        print(f"  Median: {median}")
-        print(f"  Average: {average}")
-
-github = GithubApi()
-github.metrics(50, "dw-web")
-github.metrics(50, "mob-api")

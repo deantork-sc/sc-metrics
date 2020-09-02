@@ -34,7 +34,7 @@ If all tickets are closed as soon as they are merged into master, just get time 
 #### Goal
 Get the percentage of the time we experience a service outage
 #### Ideas
-Use AWS MTTR
+Conversation with Anyhtony
 #### Programatic solution
 
 ## Deployment frequency
@@ -48,5 +48,10 @@ Does CircleCI provide enough correct information? AWS?
 #### Goal
 Find the number of Highest/High priority bugs (type = bug/support) between the previous build and the current build, per build
 #### Ideas
-
+see above
 #### Programatic solution
+* Get list of bugs from JIRA
+* Get list of successful builds from CircleCI
+* For each bug, find which build it occurred in
+* Get the average of bugs per build
+

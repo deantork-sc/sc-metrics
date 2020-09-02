@@ -6,3 +6,6 @@ circleci:
 
 github:
 	pipenv run python3 github_api.py
+
+metrics:
+	pipenv run python3 metrics_aggregator.py

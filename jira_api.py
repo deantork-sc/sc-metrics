@@ -71,6 +71,4 @@ class JiraApi:
         issue = self.get_issue().text
         with open('issue.json', 'w') as outfile:
             json.dump(json.loads(issue), outfile)
-
-jira = JiraApi()
-jira.demo()
+            
