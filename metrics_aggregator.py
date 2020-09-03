@@ -36,20 +36,38 @@ class MetricsAggregator:
         utcnow = datetime.datetime.utcnow()
         for build in builds:
             build_stop_datetime = self.circleci.format_time(build["stop_time"])
-            build["age"] = self.timediff_hours(build_stop_datetime, utcnow
+            build["age"] = self.timediff_hours(build_stop_datetime, utcnow)
         bugs_response = self.jira.search_issue(jql_query=jql_query)
         bugs = json.loads(builds_response.text)
-        for bug in bugs:
-            bug_datetime = self.jira.format_time(bug["stop_time"])
-            bug["age"] = self.timediff_hours(bug_datetime, utcnow
+        bugs_per_build = self.get_bugs_per_build(builds, bugs, utcnow)
+        print()
 
+    def get_bugs_per_build(self, builds, bugs, utcnow):
         """
-            create an array (bug_counts) where each index = bugs that occurred during that build index
+            create an array (bugs_per_build) where each index = bugs that occurred during that build index
             i.e., build 0 is the first build (most recent successful one) we get back. 
-            bug_counts[0] will be the number of bugs since the most recent build
-            bug_counts[1] will be the number of bugs between build 1 (second most recent) and build 0
+            bugs_per_build[0] will be the number of bugs since the most recent build
+            bugs_per_build[1] will be the number of bugs between build 1 (second most recent) and build 0
             etc.
         """
+        # want to refactor to just get the number of builds we care about, then do bug_count / builds
+        build_len = len(builds)
+        bug_len = len(bugs)
+        bugs_per_build = []
+        build_index = 0
+        bug_index = 0
+        while (bug_index < bug_len) and (build_index < build_len):
+            # for each bug:
+            #   if bug age is less than current build, increment
+            #   else, keep incrementing build_index until 
+            bug_datetime = self.jira.format_time(bug["stop_time"])
+            bug_age = self.timediff_hours(bug_datetime, utcnow)
+            if bug_age < builds[build_index]["age"]:
+                bugs_per_build[bug_index] += 1
+                bug_index += 1
+            else:
+                build_index += 1
+        return 
 
 
 def main():
