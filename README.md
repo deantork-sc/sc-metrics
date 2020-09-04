@@ -34,7 +34,7 @@ If all tickets are closed as soon as they are merged into master, just get time 
 #### Goal
 Get the percentage of the time we experience a service outage
 #### Ideas
-Conversation with Anyhtony
+See conversation with Anthony
 #### Programatic solution
 
 ## Deployment frequency

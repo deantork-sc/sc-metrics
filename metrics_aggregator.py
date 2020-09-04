@@ -2,6 +2,7 @@ from github_api import GithubApi
 from circleci_api import CircleciApi
 from jira_api import JiraApi
 import datetime
+import json
 
 class MetricsAggregator:
     def __init__(self):
@@ -33,16 +34,16 @@ class MetricsAggregator:
             (priority = Highest OR priority = High) AND created > -90d order by createdDate DESC"
         builds_response = self.circleci.get_builds(project=project, limit=limit, filter="successful")
         builds = json.loads(builds_response.text)
+        deployments = self.circleci.get_deployments(builds, project, limit)
         utcnow = datetime.datetime.utcnow()
-        for build in builds:
-            build_stop_datetime = self.circleci.format_time(build["stop_time"])
-            build["age"] = self.timediff_hours(build_stop_datetime, utcnow)
+        for deployment in deployments:
+            deployment_stop_datetime = self.circleci.format_time(deployment["stop_time"])
+            deployment["age"] = self.timediff_hours(deployment_stop_datetime, utcnow)
         bugs_response = self.jira.search_issue(jql_query=jql_query)
-        bugs = json.loads(builds_response.text)
-        bugs_per_build = self.get_bugs_per_build(builds, bugs, utcnow)
-        print()
+        bugs = json.loads(bugs_response.text)
+        bugs_per_build = self.get_bugs_per_build(deployments, bugs, utcnow)
 
-    def get_bugs_per_build(self, builds, bugs, utcnow):
+    def get_bugs_per_build(self, deployments, bugs, utcnow):
         """
             create an array (bugs_per_build) where each index = bugs that occurred during that build index
             i.e., build 0 is the first build (most recent successful one) we get back. 
@@ -51,18 +52,18 @@ class MetricsAggregator:
             etc.
         """
         # want to refactor to just get the number of builds we care about, then do bug_count / builds
-        build_len = len(builds)
-        bug_len = len(bugs)
+        deployment_count = len(deployments)
+        bug_count = len(bugs)
         bugs_per_build = []
         build_index = 0
         bug_index = 0
-        while (bug_index < bug_len) and (build_index < build_len):
+        while (bug_index < bug_count) and (build_index < deployment_count):
             # for each bug:
             #   if bug age is less than current build, increment
             #   else, keep incrementing build_index until 
-            bug_datetime = self.jira.format_time(bug["stop_time"])
+            bug_datetime = self.jira.format_time(bugs[bug_index]["stop_time"])
             bug_age = self.timediff_hours(bug_datetime, utcnow)
-            if bug_age < builds[build_index]["age"]:
+            if bug_age < deployments[build_index]["age"]:
                 bugs_per_build[bug_index] += 1
                 bug_index += 1
             else:

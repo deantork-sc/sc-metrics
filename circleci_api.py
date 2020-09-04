@@ -24,10 +24,16 @@ class CircleciApi:
         url = f"https://circleci.com/api/v1.1/project/github/silvercar/{project}?limit={limit}{filter}&shallow=true"
         return requests.request( "GET", url, headers=self.headers)
 
-    def get_deployments(self):
-        # filter to only build-publish builds or something
-
-
+    def get_deployments(self, builds, project, limit):
+        if (project == "mob-api"):
+            deployment_title = "build"
+            # need to also check for deploy-prd step
+        elif (project == "dw-web"):
+            deployment_title = "build-publish"
+        # only return builds whose workflow is a successful deployment
+        return filter(lambda build: build["workflows"]["workflow-name"] == deployment_title, builds)
+                
+    # currently out of date: will likely be getting this data from AWS/CloudWatch
     def get_mttr(self, project):
         response = get_builds(15, project)
         build_array = json.loads(response.text)
@@ -47,20 +53,18 @@ class CircleciApi:
         mttr = recovery_time_sum / recovery_count
         return mttr
 
-    def get_workflows(self):
-        url = 'https://circleci.com/api/v2/insights/github/silvercar/dw-web/workflows?limit=15&branch=master'
+    def get_workflows(self, project):
+        url = f'https://circleci.com/api/v2/insights/github/silvercar/{project}/workflows'
         return requests.request( "GET", url, headers=self.headers)
 
     def demo(self):
-        builds = self.get_builds(limit=5, project="dw-web").text
+        builds = self.get_builds(limit=10, project="mob-api").text
         with open('builds.json', 'w') as outfile:
             json.dump(json.loads(builds), outfile)
 
-        workflows = self.get_workflows().text
+        workflows = self.get_workflows(project="mob-api").text
         with open('workflows.json', 'w') as outfile:
             json.dump(json.loads(workflows), outfile)
 
 circleci = CircleciApi()
-builds_resp = circleci.get_builds("mob-api", 1, "successful")
-print(json.dumps(json.loads(builds_resp.text), sort_keys=True, indent=4, separators=(",", ": ")))
-print(datetime.datetime.utcnow())
+circleci.demo()
