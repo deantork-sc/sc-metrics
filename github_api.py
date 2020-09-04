@@ -1,7 +1,7 @@
 import requests
-from requests.auth import HTTPBasicAuth
 import json
 import datetime
+
 
 class GithubApi:
     def __init__(self):
@@ -9,10 +9,10 @@ class GithubApi:
             data = json.load(config)
             token = data["GITHUB_PAT"]
         self.debug = False
-        self.headers = { 
+        self.headers = {
             "Accept": "Accept: application/vnd.github.v3+json",
-            "Authorization": f"token {token}" }
-    
+            "Authorization": f"token {token}"}
+
     def format_time(self, datetime_str):
         format_string = "%Y-%m-%dT%H:%M:%SZ"
         return datetime.datetime.strptime(datetime_str, format_string)
@@ -21,7 +21,7 @@ class GithubApi:
         if (limit > 100):
             print("PRs limited to 100 per page - if you want to use more, need to paginate")
         url = f"https://api.github.com/repos/silvercar/{project}/pulls?state={state}&per_page={limit}"
-        return requests.request( "GET", url, headers=self.headers)
+        return requests.request("GET", url, headers=self.headers)
 
     def get_lead_time_array(self, project, limit):
         prs_json = json.loads(self.get_prs(project, "closed", limit).text)
@@ -57,9 +57,11 @@ class GithubApi:
             end_datetime = commits_json[-1]["commit"]["committer"]["date"]
             if (self.debug):
                 print(f"  start={start_datetime}, end={end_datetime}")
-            delta = self.time_delta(start_datetime, end_datetime)
+            delta = self.format_time(end_datetime) - self.format_time(start_datetime)
+            delta_hours = delta.days * 24 + delta.seconds / 3600
             if (len(commits_json) > 0):
                 # don't want to factor in single-commit PRs, as they have lead time of 0
-                delta_list.append(delta)
-        print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} releases, {unlabeled_count} unlabeled, and {other_count} misc. others.")
+                delta_list.append(delta_hours)
+        print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} \
+                    releases, {unlabeled_count} unlabeled, and {other_count} misc. others.")
         return delta_list
