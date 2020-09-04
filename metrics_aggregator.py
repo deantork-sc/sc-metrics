@@ -28,20 +28,26 @@ class MetricsAggregator:
         print(f"  Median: {median}")
         print(f"  Average: {average}")
     
-    def print_change_fail(self, project, limit):
-        # this query returns tickets created in the last 3 months that are tagged as bug/support in Silvercar with priority Highest/High
+    def print_change_fail(self):
+        # this query returns tickets created in the last year that are tagged as bug/support
+        # in Silvercar with priority Highest/High
         jql_query = "(project = Silvercar) AND (type = Support OR type = Bug) AND \
-            (priority = Highest OR priority = High) AND created > -90d order by createdDate DESC"
-        builds_response = self.circleci.get_builds(project=project, limit=limit, filter="successful")
-        builds = json.loads(builds_response.text)
-        deployments = self.circleci.get_deployments(builds, project, limit)
+            (priority = Highest OR priority = High) AND created > -52w order by createdDate DESC"
+        # assuming that we're just going
+        releases_response = self.github.get_releases(project="dw-web")
+        releases = json.loads(releases_response.text)
         utcnow = datetime.datetime.utcnow()
-        for deployment in deployments:
-            deployment_stop_datetime = self.circleci.format_time(deployment["stop_time"])
-            deployment["age"] = self.timediff_hours(deployment_stop_datetime, utcnow)
+        release_count = 0
+        for release in releases:
+            release_count += 1
+            time_since_release = self.github.format_time(release["published_time"]) - datetime.datetime.utcnow()
+            if (time_since_release.days > 365):
+                releases = releases[:release_count+1]
+        with open('releases_year.json', 'w') as outfile:
+            json.dump(releases, outfile)
         bugs_response = self.jira.search_issue(jql_query=jql_query)
-        bugs = json.loads(bugs_response.text)
-        bugs_per_build = self.get_bugs_per_build(deployments, bugs, utcnow)
+        bugs_count = len(json.loads(bugs_response.text))
+        print(f"Got {len(releases)} releases and {bugs_count} bugs.")
 
     def get_bugs_per_build(self, deployments, bugs, utcnow):
         """

@@ -23,6 +23,10 @@ class GithubApi:
         url = f"https://api.github.com/repos/silvercar/{project}/pulls?state={state}&per_page={limit}"
         return requests.request("GET", url, headers=self.headers)
 
+    def get_releases(self, project):
+        url = f"https://api.github.com/repos/silvercar/{project}/releases"
+        return requests.request("GET", url, headers=self.headers)
+
     def get_lead_time_array(self, project, limit):
         prs_json = json.loads(self.get_prs(project, "closed", limit).text)
         delta_list = []
@@ -65,3 +69,12 @@ class GithubApi:
         print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} \
                     releases, {unlabeled_count} unlabeled, and {other_count} misc. others.")
         return delta_list
+
+    def demo(self):
+        releases = self.get_releases(project="mob-api").text
+        with open('releases.json', 'w') as outfile:
+            json.dump(json.loads(releases), outfile)
+
+
+github = GithubApi()
+github.demo()
