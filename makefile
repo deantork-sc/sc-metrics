@@ -9,3 +9,8 @@ github:
 
 metrics:
 	pipenv run python3 metrics_aggregator.py
+
+test: FORCE
+	python3 -m unittest discover -s ./test -p '*_test.py'
+
+FORCE:
