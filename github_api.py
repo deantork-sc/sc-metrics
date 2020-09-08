@@ -18,7 +18,7 @@ class GithubApi:
         return datetime.datetime.strptime(datetime_str, format_string)
 
     def get_prs(self, project, state, limit):
-        if (limit > 100):
+        if limit > 100:
             print("PRs limited to 100 per page - if you want to use more, need to paginate")
         url = f"https://api.github.com/repos/silvercar/{project}/pulls?state={state}&per_page={limit}"
         return requests.request("GET", url, headers=self.headers)
@@ -41,22 +41,22 @@ class GithubApi:
         unlabeled_count = 0
         for pr in prs_json:
             pr["body"] = pr["body"][:80].replace("[X]", "[x]")
-            if (self.debug):
+            if self.debug:
                 print(pr["title"])
                 print("  Body: " + repr(pr["body"][:80]) + "...")
-            if ("[x] Feature" not in pr["body"]):
+            if "[x] Feature" not in pr["body"]:
                 if "[x] Bug Fix" in pr["body"]:
                     bugfix_count += 1
                 if "[x] Release" in pr["body"]:
                     release_count += 1
                 if "[x] Other" in pr["body"]:
                     other_count += 1
-                if ("[x]" not in (pr["body"][:80])):
+                if "[x]" not in (pr["body"][:80]):
                     if ("bump version" in pr["title"]) or ("Bump version" in pr["title"]):
                         release_count += 1
                     else:
                         unlabeled_count += 1
-                        if (self.debug):
+                        if self.debug:
                             print("unlabeled")
                 continue
             commits_response = requests.request("GET", url=pr["commits_url"], headers=self.headers)
@@ -64,11 +64,11 @@ class GithubApi:
             # commits_json is an array of commit objects, from oldest as first elem to most recent as last elem
             start_datetime = commits_json[0]["commit"]["committer"]["date"]
             end_datetime = commits_json[-1]["commit"]["committer"]["date"]
-            if (self.debug):
+            if self.debug:
                 print(f"  start={start_datetime}, end={end_datetime}")
             delta = self.format_time(end_datetime) - self.format_time(start_datetime)
             delta_hours = delta.days * 24 + delta.seconds / 3600
-            if (len(commits_json) > 0):
+            if len(commits_json) > 0:
                 # don't want to factor in single-commit PRs, as they have lead time of 0
                 delta_list.append(delta_hours)
         print(f"  In the last {limit} PRs, found {len(delta_list)} features, {bugfix_count} bugfixes, {release_count} \

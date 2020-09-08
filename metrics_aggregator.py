@@ -11,11 +11,6 @@ class MetricsAggregator:
         self.circleci = CircleciApi()
         self.jira = JiraApi()
 
-    def timediff_hours(self, start_datetime_obj, end_datetime_obj):
-        delta = end_datetime_obj - start_datetime_obj
-        # hours not stored in delta object - need to derive from days and seconds
-        return delta.days * 24 + delta.seconds / 3600
-
     def print_lead_time(self, project, limit):
         delta_list = self.github.get_lead_time_array(project, limit)
         count = len(delta_list)
@@ -41,7 +36,8 @@ class MetricsAggregator:
 
     def print_deployment_frequency(self, max_age):
         minor_releases = self.get_minor_releases_since(self.github.get_minor_releases(), max_age)
-        oldest_release_age = (datetime.datetime.utcnow() - self.github.format_time(minor_releases[-1]["published_at"])).days
+        oldest_release_age = (datetime.datetime.utcnow() -
+                              self.github.format_time(minor_releases[-1]["published_at"])).days
         deployment_freq = round(oldest_release_age / len(minor_releases), 2)
         print(f"In the last {max_age} days, got {len(minor_releases)} minor releases. We release, on average, every",
               f"{deployment_freq} days.")
@@ -58,34 +54,7 @@ class MetricsAggregator:
         bugs_count = len(json.loads(bugs_response.text))
         print(f"Got {len(minor_releases)} releases and {bugs_count} bugs since the oldest release",
               f"on {minor_releases[-1]['published_at']}, which is {oldest_release_age} days old.")
-        print(f"  Change fail percentage (bugs/releases) = {bugs_count / len(minor_releases)}")
-
-    def get_bugs_per_build(self, deployments, bugs, utcnow):
-        """
-            create an array (bugs_per_build) where each index = bugs that occurred during that build index
-            i.e., build 0 is the first build (most recent successful one) we get back. 
-            bugs_per_build[0] will be the number of bugs since the most recent build
-            bugs_per_build[1] will be the number of bugs between build 1 (second most recent) and build 0
-            etc.
-        """
-        # want to refactor to just get the number of builds we care about, then do bug_count / builds
-        deployment_count = len(deployments)
-        bug_count = len(bugs)
-        bugs_per_build = []
-        build_index = 0
-        bug_index = 0
-        while (bug_index < bug_count) and (build_index < deployment_count):
-            # for each bug:
-            #   if bug age is less than current build, increment
-            #   else, keep incrementing build_index until 
-            bug_datetime = self.jira.format_time(bugs[bug_index]["stop_time"])
-            bug_age = self.timediff_hours(bug_datetime, utcnow)
-            if bug_age < deployments[build_index]["age"]:
-                bugs_per_build[bug_index] += 1
-                bug_index += 1
-            else:
-                build_index += 1
-        return
+        print(f"  Change fail percentage (bugs/releases) = {round(bugs_count / len(minor_releases), 3)}")
 
 
 def main():
