@@ -27,7 +27,7 @@ class GithubApi:
         url = f"https://api.github.com/repos/silvercar/{project}/releases"
         return requests.request("GET", url, headers=self.headers)
 
-    def get_major_releases(self):
+    def get_minor_releases(self):
         releases_response = self.get_releases("dw-web")
         releases = json.loads(releases_response.text)
         return list(filter(lambda release: release["tag_name"].split('.')[2] == '0', releases))

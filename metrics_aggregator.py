@@ -29,36 +29,36 @@ class MetricsAggregator:
         print(f"  Median: {median}")
         print(f"  Average: {average}")
 
-    def get_major_releases_since(self, major_releases, age):
+    def get_minor_releases_since(self, minor_releases, age):
         release_count = 0
         utcnow = datetime.datetime.utcnow()
-        for release in major_releases:
+        for release in minor_releases:
             time_since_release = utcnow - self.github.format_time(release["published_at"])
             if time_since_release.days > age:
-                return major_releases[:release_count]
+                return minor_releases[:release_count]
             release_count += 1
-        return major_releases
+        return minor_releases
 
     def print_deployment_frequency(self, max_age):
-        major_releases = self.get_major_releases_since(self.github.get_major_releases(), max_age)
-        oldest_release_age = (datetime.datetime.utcnow() - self.github.format_time(major_releases[-1]["published_at"])).days
-        deployment_freq = round(oldest_release_age / len(major_releases), 2)
-        print(f"In the last {max_age} days, got {len(major_releases)} major releases. We release, on average, every",
+        minor_releases = self.get_minor_releases_since(self.github.get_minor_releases(), max_age)
+        oldest_release_age = (datetime.datetime.utcnow() - self.github.format_time(minor_releases[-1]["published_at"])).days
+        deployment_freq = round(oldest_release_age / len(minor_releases), 2)
+        print(f"In the last {max_age} days, got {len(minor_releases)} minor releases. We release, on average, every",
               f"{deployment_freq} days.")
 
     def print_change_fail(self, max_age):
         utcnow = datetime.datetime.utcnow()
-        major_releases = self.get_major_releases_since(self.github.get_major_releases(), max_age)
-        oldest_release_age = (utcnow - self.github.format_time(major_releases[-1]["published_at"])).days
+        minor_releases = self.get_minor_releases_since(self.github.get_minor_releases(), max_age)
+        oldest_release_age = (utcnow - self.github.format_time(minor_releases[-1]["published_at"])).days
         # this query returns tickets created since the oldest considered release that are tagged as bug/support
         # with priority Highest/High
         jql_query = "(project = Silvercar) AND (type = Support OR type = Bug) AND " + \
             f"(priority = Highest OR priority = High) AND created > -{oldest_release_age}d order by createdDate DESC"
         bugs_response = self.jira.search_issue(jql_query=jql_query)
         bugs_count = len(json.loads(bugs_response.text))
-        print(f"Got {len(major_releases)} releases and {bugs_count} bugs since the oldest release",
-              f"on {major_releases[-1]['published_at']}, which is {oldest_release_age} days old.")
-        print(f"  Change fail percentage (bugs/releases) = {bugs_count / len(major_releases)}")
+        print(f"Got {len(minor_releases)} releases and {bugs_count} bugs since the oldest release",
+              f"on {minor_releases[-1]['published_at']}, which is {oldest_release_age} days old.")
+        print(f"  Change fail percentage (bugs/releases) = {bugs_count / len(minor_releases)}")
 
     def get_bugs_per_build(self, deployments, bugs, utcnow):
         """
