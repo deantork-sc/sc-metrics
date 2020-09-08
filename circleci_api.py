@@ -31,7 +31,7 @@ class CircleciApi:
         elif (project == "dw-web"):
             deployment_title = "build-publish"
         # only return builds whose workflow is a successful deployment
-        return filter(lambda build: build["workflows"]["workflow-name"] == deployment_title, builds)
+        return list(filter(lambda build: build["workflows"]["workflow-name"] == deployment_title, builds))
 
     def get_workflows(self, project):
         url = f'https://circleci.com/api/v2/insights/github/silvercar/{project}/workflows'

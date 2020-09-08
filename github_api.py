@@ -27,6 +27,11 @@ class GithubApi:
         url = f"https://api.github.com/repos/silvercar/{project}/releases"
         return requests.request("GET", url, headers=self.headers)
 
+    def get_major_releases(self):
+        releases_response = self.get_releases("dw-web")
+        releases = json.loads(releases_response.text)
+        return list(filter(lambda release: release["tag_name"].split('.')[2] == '0', releases))
+
     def get_lead_time_array(self, project, limit):
         prs_json = json.loads(self.get_prs(project, "closed", limit).text)
         delta_list = []
@@ -71,7 +76,7 @@ class GithubApi:
         return delta_list
 
     def demo(self):
-        releases = self.get_releases(project="mob-api").text
+        releases = self.get_releases(project="dw-web").text
         with open('releases.json', 'w') as outfile:
             json.dump(json.loads(releases), outfile)
 

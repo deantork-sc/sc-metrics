@@ -4,6 +4,7 @@ from jira_api import JiraApi
 import datetime
 import json
 
+
 class MetricsAggregator:
     def __init__(self):
         self.github = GithubApi()
@@ -13,13 +14,13 @@ class MetricsAggregator:
     def timediff_hours(self, start_datetime_obj, end_datetime_obj):
         delta = end_datetime_obj - start_datetime_obj
         # hours not stored in delta object - need to derive from days and seconds
-        return delta.days * 24 + delta.seconds/3600
+        return delta.days * 24 + delta.seconds / 3600
 
     def print_lead_time(self, project, limit):
         delta_list = self.github.get_lead_time_array(project, limit)
         count = len(delta_list)
         if count == 0:
-            print ("No PRs found with current criteria.")
+            print("No PRs found with current criteria.")
             return
         delta_list.sort()
         average = round(sum(delta_list) / count, 2)
@@ -27,27 +28,37 @@ class MetricsAggregator:
         print(f"Lead time metrics (in hours) for the last {count} feature PRs in {project}: ")
         print(f"  Median: {median}")
         print(f"  Average: {average}")
-    
-    def print_change_fail(self):
-        # this query returns tickets created in the last year that are tagged as bug/support
-        # in Silvercar with priority Highest/High
-        jql_query = "(project = Silvercar) AND (type = Support OR type = Bug) AND \
-            (priority = Highest OR priority = High) AND created > -52w order by createdDate DESC"
-        # assuming that we're just going
-        releases_response = self.github.get_releases(project="dw-web")
-        releases = json.loads(releases_response.text)
-        utcnow = datetime.datetime.utcnow()
+
+    def get_major_releases_since(self, major_releases, age):
         release_count = 0
-        for release in releases:
+        utcnow = datetime.datetime.utcnow()
+        for release in major_releases:
+            time_since_release = utcnow - self.github.format_time(release["published_at"])
+            if time_since_release.days > age:
+                return major_releases[:release_count]
             release_count += 1
-            time_since_release = self.github.format_time(release["published_time"]) - datetime.datetime.utcnow()
-            if (time_since_release.days > 365):
-                releases = releases[:release_count+1]
-        with open('releases_year.json', 'w') as outfile:
-            json.dump(releases, outfile)
+        return major_releases
+
+    def print_deployment_frequency(self, max_age):
+        major_releases = self.get_major_releases_since(self.github.get_major_releases(), max_age)
+        oldest_release_age = (datetime.datetime.utcnow() - self.github.format_time(major_releases[-1]["published_at"])).days
+        deployment_freq = round(oldest_release_age / len(major_releases), 2)
+        print(f"In the last {max_age} days, got {len(major_releases)} major releases. We release, on average, every",
+              f"{deployment_freq} days.")
+
+    def print_change_fail(self, max_age):
+        utcnow = datetime.datetime.utcnow()
+        major_releases = self.get_major_releases_since(self.github.get_major_releases(), max_age)
+        oldest_release_age = (utcnow - self.github.format_time(major_releases[-1]["published_at"])).days
+        # this query returns tickets created since the oldest considered release that are tagged as bug/support
+        # with priority Highest/High
+        jql_query = "(project = Silvercar) AND (type = Support OR type = Bug) AND " + \
+            f"(priority = Highest OR priority = High) AND created > -{oldest_release_age}d order by createdDate DESC"
         bugs_response = self.jira.search_issue(jql_query=jql_query)
         bugs_count = len(json.loads(bugs_response.text))
-        print(f"Got {len(releases)} releases and {bugs_count} bugs.")
+        print(f"Got {len(major_releases)} releases and {bugs_count} bugs since the oldest release",
+              f"on {major_releases[-1]['published_at']}, which is {oldest_release_age} days old.")
+        print(f"  Change fail percentage (bugs/releases) = {bugs_count / len(major_releases)}")
 
     def get_bugs_per_build(self, deployments, bugs, utcnow):
         """
@@ -74,12 +85,13 @@ class MetricsAggregator:
                 bug_index += 1
             else:
                 build_index += 1
-        return 
+        return
 
 
 def main():
     metrics = MetricsAggregator()
-    metrics.get_lead_time(project="dw-web", limit=10)
+    metrics.print_deployment_frequency(max_age=182)
+
 
 if __name__ == '__main__':
     main()

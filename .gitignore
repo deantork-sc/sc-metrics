@@ -1,5 +1,8 @@
 config.json
-scratch*
+scratch.*
 
 *.json
 .idea/
+.vscode/
+
+__pycache__/
