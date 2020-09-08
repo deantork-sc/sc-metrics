@@ -10,6 +10,7 @@ class JiraApi:
             data = json.load(config)
             api_token = data["JIRA_API"]
         self.auth = HTTPBasicAuth("dean.torkelson@silvercar.com", api_token)
+        self.base_url = "https://silvercar.atlassian.net/rest/api/3"
         self.headers = {"Accept": "application/json"}
 
     def format_time(self, datetime_str):
@@ -17,19 +18,19 @@ class JiraApi:
         return datetime.datetime.strptime(datetime_str, format_string)
 
     def get_issue_changelog(self, issue_id):
-        url = f"https://silvercar.atlassian.net/rest/api/3/issue/{issue_id}/changelog"
+        url = f"{self.base_url}/issue/{issue_id}/changelog"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
     def get_group(self):
-        url = f"https://silvercar.atlassian.net/rest/api/3/groupuserpicker?query=dean"
+        url = f"{self.base_url}/groupuserpicker?query=dean"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
     def search_issue(self, jql_query):
-        url = f"https://silvercar.atlassian.net/rest/api/3/search?jql={jql_query}"
+        url = f"{self.base_url}/search?jql={jql_query}"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
-    def get_issue(self):
-        url = f"https://silvercar.atlassian.net/rest/api/3/issue/HLP-3335"
+    def get_issue(self, issue):
+        url = f"{self.base_url}/{issue}"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
     def demo(self):
@@ -47,6 +48,6 @@ class JiraApi:
         with open('search.json', 'w') as outfile:
             json.dump(json.loads(search), outfile)
 
-        issue = self.get_issue().text
+        issue = self.get_issue("HLP-3335").text
         with open('issue.json', 'w') as outfile:
             json.dump(json.loads(issue), outfile)

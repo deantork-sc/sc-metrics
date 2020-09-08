@@ -8,6 +8,7 @@ class CircleciApi:
         with open('./config.json') as config:
             data = json.load(config)
             api_token = data["CIRCLECI_API"]
+        self.base_url = "https://circleci.com/api"
         self.headers = {
             "Accept": "application/json",
             "Circle-Token": api_token}
@@ -21,11 +22,11 @@ class CircleciApi:
             filter = f"&filter={filter}"
         else:
             filter = ""
-        url = f"https://circleci.com/api/v1.1/project/github/silvercar/{project}?limit={limit}{filter}&shallow=true"
+        url = f"{self.base_url}/v1.1/project/github/silvercar/{project}?limit={limit}{filter}&shallow=true"
         return requests.request("GET", url, headers=self.headers)
 
     def get_workflows(self, project):
-        url = f'https://circleci.com/api/v2/insights/github/silvercar/{project}/workflows'
+        url = f"{self.base_url}/v2/insights/github/silvercar/{project}/workflows"
         return requests.request("GET", url, headers=self.headers)
 
     def demo(self):

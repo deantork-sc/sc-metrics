@@ -9,6 +9,7 @@ class GithubApi:
             data = json.load(config)
             token = data["GITHUB_PAT"]
         self.debug = False
+        self.base_url = "https://api.github.com"
         self.headers = {
             "Accept": "Accept: application/vnd.github.v3+json",
             "Authorization": f"token {token}"}
@@ -20,11 +21,11 @@ class GithubApi:
     def get_prs(self, project, state, limit):
         if limit > 100:
             print("PRs limited to 100 per page - if you want to use more, need to paginate")
-        url = f"https://api.github.com/repos/silvercar/{project}/pulls?state={state}&per_page={limit}"
+        url = f"{self.base_url}/repos/silvercar/{project}/pulls?state={state}&per_page={limit}"
         return requests.request("GET", url, headers=self.headers)
 
     def get_releases(self, project):
-        url = f"https://api.github.com/repos/silvercar/{project}/releases"
+        url = f"{self.base_url}/repos/silvercar/{project}/releases"
         return requests.request("GET", url, headers=self.headers)
 
     def get_minor_releases(self):
