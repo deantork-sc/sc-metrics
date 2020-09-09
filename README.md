@@ -36,7 +36,8 @@ TBD
 Get the average number of releases per developer, per day
 #### Formula
 Currently calculated as the average number of releases, per day, for a given repo
-
+#### Potential bugs
+Not all repos create releases
 
 ## Change fail percentage
 #### Goal

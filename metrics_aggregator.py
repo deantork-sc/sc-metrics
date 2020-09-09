@@ -38,8 +38,6 @@ class MetricsAggregator:
 
     def print_change_fail(self, max_age):
         # TODO change to all releases, not just minor
-        # TODO instead of passing max_age to releases_since, pass the age of the oldest bug (to ensure that out-of-date
-        #   bugs aren't being included
         # TODO fetch more releases if some bugs are older than the oldest retrieved release
         utcnow = datetime.datetime.utcnow()
         minor_releases = self.github.get_releases_since(self.github.get_minor_releases(), max_age)

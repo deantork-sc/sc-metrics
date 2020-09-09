@@ -18,7 +18,7 @@ class JiraApi:
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
     def get_group(self):
-        url = f"{self.base_url}/groupuserpicker?query=dean"
+        url = f"{self.base_url}/groupuserpicker"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
     def search_issue(self, jql_query):
