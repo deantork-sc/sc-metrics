@@ -34,6 +34,7 @@ class GithubApi:
         return list(filter(lambda release: release["tag_name"].split('.')[2] == '0', releases))
 
     def get_lead_time_array(self, project, limit):
+        # TODO find a way to break it down by engineer
         prs_json = json.loads(self.get_prs(project, "closed", limit).text)
         delta_list = []
         bugfix_count = 0
@@ -80,6 +81,10 @@ class GithubApi:
         releases = self.get_releases(project="dw-web").text
         with open('releases.json', 'w') as outfile:
             json.dump(json.loads(releases), outfile)
+
+        prs = self.get_prs(project="mob-api", state="closed", limit=5).text
+        with open('prs.json', 'w') as outfile:
+            json.dump(json.loads(prs), outfile)
 
 
 github = GithubApi()

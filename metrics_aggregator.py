@@ -35,7 +35,10 @@ class MetricsAggregator:
         return minor_releases
 
     def print_deployment_frequency(self, max_age):
-        minor_releases = self.get_minor_releases_since(self.github.get_minor_releases(), max_age)
+        # TODO update to releases/dev/day
+        # TODO see how frequent deployments are on other repos (i.e. mob-api)
+        releases_response = self.github.get_releases(project="mob-api")
+        minor_releases = json.loads(releases_response.text)
         oldest_release_age = (datetime.datetime.utcnow() -
                               self.github.format_time(minor_releases[-1]["published_at"])).days
         deployment_freq = round(oldest_release_age / len(minor_releases), 2)
@@ -60,6 +63,8 @@ class MetricsAggregator:
 def main():
     metrics = MetricsAggregator()
     metrics.print_deployment_frequency(max_age=182)
+    # metrics.print_change_fail(max_age=182)
+    # metrics.print_lead_time(project="mob-api", limit=30)
 
 
 if __name__ == '__main__':
