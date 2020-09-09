@@ -33,8 +33,6 @@ class TestGithubApi(unittest.TestCase):
                 time_diff = self.github.format_time(sorted_prs[i - 1]["merged_at"]) - self.github.format_time(sorted_prs[i]["merged_at"])
                 self.assertTrue(time_diff.total_seconds() > 0)
 
-
-    #2
     def test_get_feature_prs(self):
         with open("test/test-data/test_prs.json") as prs_json:
             prs = json.load(prs_json)
