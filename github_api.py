@@ -4,11 +4,11 @@ import datetime
 
 
 class GithubApi:
-    def __init__(self):
+    def __init__(self, debug=False):
         with open('./config.json') as config:
             data = json.load(config)
             token = data["GITHUB_PAT"]
-        self.debug = True
+        self.debug = debug
         self.base_url = "https://api.github.com"
         self.headers = {
             "Accept": "Accept: application/vnd.github.v3+json",
@@ -168,11 +168,11 @@ class GithubApi:
     # Demonstrates example JSON response data
     def demo(self):
         releases = self.get_releases(project="dw-web").text
-        with open('releases.json', 'w') as outfile:
+        with open('demo/releases.json', 'w') as outfile:
             json.dump(json.loads(releases), outfile)
 
         prs = self.get_prs(project="mob-api", state="closed", limit=5).text
-        with open('prs.json', 'w') as outfile:
+        with open('demo/prs.json', 'w') as outfile:
             json.dump(json.loads(prs), outfile)
 
 

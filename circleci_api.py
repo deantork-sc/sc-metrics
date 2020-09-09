@@ -33,9 +33,9 @@ class CircleciApi:
     # Demonstrates example JSON response data
     def demo(self):
         builds = self.get_builds(limit=10, project="mob-api").text
-        with open('builds.json', 'w') as outfile:
+        with open('demo/builds.json', 'w') as outfile:
             json.dump(json.loads(builds), outfile)
 
         workflows = self.get_workflows(project="mob-api").text
-        with open('workflows.json', 'w') as outfile:
+        with open('demo/workflows.json', 'w') as outfile:
             json.dump(json.loads(workflows), outfile)

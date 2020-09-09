@@ -1,8 +1,7 @@
 config.json
 scratch.*
 
-*.json
+demo/
 .idea/
 .vscode/
-
 __pycache__/

@@ -38,3 +38,4 @@ class TestGithubApi(unittest.TestCase):
             prs = json.load(prs_json)
             feature_prs = list(filter(self.github.is_feature_pr, prs))
             self.assertEqual(len(feature_prs), 2)
+

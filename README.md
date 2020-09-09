@@ -40,7 +40,7 @@ Currently calculated as the average number of releases, per day, for a given rep
 
 ## Change fail percentage
 #### Goal
-Find the number of Highest/High priority bugs (type = bug/support) between the previous build and the current build, per build
+Find the number of Highest/High priority bugs between the previous build and the current build, per build
 #### Formula
 Currently calculated as the average number of bugs fitting the above criteria per each minor release 
 
