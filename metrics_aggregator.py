@@ -12,7 +12,8 @@ class MetricsAggregator:
         self.jira = JiraApi()
 
     def print_lead_time(self, project, limit):
-        delta_list = self.github.get_lead_time_array(project, limit)
+        lead_times = self.github.get_lead_time_array(project, limit)
+        delta_list = list(map(lambda lead_time: lead_time["delta"], lead_times))
         count = len(delta_list)
         if count == 0:
             print("No PRs found with current criteria.")
@@ -62,9 +63,9 @@ class MetricsAggregator:
 
 def main():
     metrics = MetricsAggregator()
-    metrics.print_deployment_frequency(max_age=182)
+    # metrics.print_deployment_frequency(max_age=182)
     # metrics.print_change_fail(max_age=182)
-    # metrics.print_lead_time(project="mob-api", limit=30)
+    metrics.print_lead_time(project="mob-api", limit=50)
 
 
 if __name__ == '__main__':
