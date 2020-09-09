@@ -22,36 +22,25 @@ Want to group by scrum team and individual
 ## Lead time
 #### Goal
 Get the time it takes between start of work on a story and that story's deployment to the code
-#### Ideas
-If all tickets are closed as soon as they are merged into master, just get time discrepancy between first and last commit
-#### Programatic solution
-* From GitHub, get the last 100 successful PRs in some repo (mob-api? dw-web?)
-* Get the diff between the timestamp of the first commit and the timestamp of when the PR was merged
-* From the description, scrape the story title (optional, for debugging)
-#### Potential bugs
+#### Formula
+Calculated as the average amount of time between the first commit of a feature PR and the next release after the PR is merged, for all feature PRs out of the last however many closed PRs total
 
 ## MTTR
 #### Goal
 Get the percentage of the time we experience a service outage
-#### Ideas
-See conversation with Anthony
-#### Programatic solution
+#### Formula
+TBD
 
 ## Deployment frequency
 #### Goal
 Get the average number of releases per developer, per day
-#### Ideas
-Does CircleCI provide enough correct information? AWS?
-#### Programatic solution
+#### Formula
+Currently calculated as the average number of releases, per day, for a given repo
+
 
 ## Change fail percentage
 #### Goal
 Find the number of Highest/High priority bugs (type = bug/support) between the previous build and the current build, per build
-#### Ideas
-see above
-#### Programatic solution
-* Get list of bugs from JIRA
-* Get list of successful builds from CircleCI
-* For each bug, find which build it occurred in
-* Get the average of bugs per build
+#### Formula
+Currently calculated as the average number of bugs fitting the above criteria per each minor release 
 

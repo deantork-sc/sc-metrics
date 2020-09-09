@@ -72,6 +72,17 @@ class GithubApi:
         releases = json.loads(releases_response.text)
         return list(filter(lambda release: release["tag_name"].split('.')[2] == '0', releases))
 
+    # Slices a list of releases to only include the releases that are less than `age` days old
+    def get_releases_since(self, releases, age):
+        release_count = 0
+        utcnow = datetime.datetime.utcnow()
+        for release in releases:
+            time_since_release = utcnow - self.format_time(release["published_at"])
+            if time_since_release.days > age:
+                return releases[:release_count]
+            release_count += 1
+        return releases
+
     # Prints statistics about what the last `limit` PRs have been marked as in the body of the PR
     def print_recent_pr_types(self, project, limit):
         feature_count = 0
