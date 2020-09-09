@@ -13,10 +13,6 @@ class CircleciApi:
             "Accept": "application/json",
             "Circle-Token": api_token}
 
-    def format_time(self, datetime_str):
-        format_string = "%Y-%m-%dT%H:%M:%S.%fZ"
-        return datetime.datetime.strptime(datetime_str, format_string)
-
     def get_builds(self, project, limit, filter=None):
         if filter:
             filter = f"&filter={filter}"
@@ -29,6 +25,12 @@ class CircleciApi:
         url = f"{self.base_url}/v2/insights/github/silvercar/{project}/workflows"
         return requests.request("GET", url, headers=self.headers)
 
+    # Creates a datetime object given a CircleCI-style datetime string
+    def format_time(self, datetime_str):
+        format_string = "%Y-%m-%dT%H:%M:%S.%fZ"
+        return datetime.datetime.strptime(datetime_str, format_string)
+
+    # Demonstrates example JSON response data
     def demo(self):
         builds = self.get_builds(limit=10, project="mob-api").text
         with open('builds.json', 'w') as outfile:

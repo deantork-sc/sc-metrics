@@ -154,7 +154,7 @@ class GithubApi:
                 print()
         return lead_times
 
-    # Writes example JSON response data
+    # Demonstrates example JSON response data
     def demo(self):
         releases = self.get_releases(project="dw-web").text
         with open('releases.json', 'w') as outfile:

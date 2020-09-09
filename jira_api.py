@@ -13,10 +13,6 @@ class JiraApi:
         self.base_url = "https://silvercar.atlassian.net/rest/api/3"
         self.headers = {"Accept": "application/json"}
 
-    def format_time(self, datetime_str):
-        format_string = "%Y-%m-%dT%H:%M:%S.%f%z"
-        return datetime.datetime.strptime(datetime_str, format_string)
-
     def get_issue_changelog(self, issue_id):
         url = f"{self.base_url}/issue/{issue_id}/changelog"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
@@ -33,6 +29,12 @@ class JiraApi:
         url = f"{self.base_url}/{issue}"
         return requests.request("GET", url, headers=self.headers, auth=self.auth)
 
+    # Creates a datetime object given a JIRA-style datetime string
+    def format_time(self, datetime_str):
+        format_string = "%Y-%m-%dT%H:%M:%S.%f%z"
+        return datetime.datetime.strptime(datetime_str, format_string)
+
+    # Demonstrates example JSON response data
     def demo(self):
         changelog = self.get_issue_changelog("HLP-3335").text
         with open('changelog.json', 'w') as outfile:
